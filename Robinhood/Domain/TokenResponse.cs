@@ -1,6 +1,6 @@
 ﻿namespace Robinhood.Domain
 {
-    public class TokenResponse
+    internal class TokenResponse
     {
         public string Token { get; set; }
         public string MfaType { get; set; }

@@ -1,0 +1,17 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Robinhood", "Robinhood\Robinhood.csproj", "{8D1F2C96-9375-40BA-BC3A-4CFABFC2D866}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobinhoodTest", "RobinhoodTest\RobinhoodTest.csproj", "{479B50F9-79D1-4951-BACC-36E37BC4559F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Any|Any CPU = Any|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D1F2C96-9375-40BA-BC3A-4CFABFC2D866}.Any|Any CPU.ActiveCfg = Any|Any CPU
+		{8D1F2C96-9375-40BA-BC3A-4CFABFC2D866}.Any|Any CPU.Build.0 = Any|Any CPU
+		{479B50F9-79D1-4951-BACC-36E37BC4559F}.Any|Any CPU.ActiveCfg = Any|Any CPU
+		{479B50F9-79D1-4951-BACC-36E37BC4559F}.Any|Any CPU.Build.0 = Any|Any CPU
+	EndGlobalSection
+EndGlobal

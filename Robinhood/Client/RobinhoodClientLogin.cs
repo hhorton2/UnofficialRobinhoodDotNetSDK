@@ -1,25 +1,36 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Robinhood.Domain;
 using Robinhood.Uri;
 
-namespace Robinhood
+namespace Robinhood.Client
 {
-    public class RobinhoodClient
+    public partial class RobinhoodClient
     {
-        private static readonly HttpClient Http = new HttpClient();
-        public string _token = "";
+        private static readonly HttpClient Http = new HttpClient(new HttpClientHandler
+        {
+            AllowAutoRedirect = false
+        });
+
+        private static readonly JsonSerializerSettings JsonSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new SnakeCaseNamingStrategy()
+            }
+        };
+
 
         public static async Task<RobinhoodClient> GetClient(string username, string password)
         {
             var client = new RobinhoodClient();
             Init();
-            await client.Login(username, password);
+            await Login(username, password);
             return client;
         }
 
@@ -29,7 +40,7 @@ namespace Robinhood
             Http.DefaultRequestHeaders.Add("User-Agent", "Robinhood/2357 (Android/2.19.0)");
         }
 
-        private async Task Login(string username, string password)
+        private static async Task Login(string username, string password)
         {
             var uri = new UriBuilder
             {
@@ -56,18 +67,15 @@ namespace Robinhood
             {
                 throw new NotSupportedException("MFA login is not supported at this time.");
             }
-            _token = tokenResponse.Token;
+
+            Http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Token", tokenResponse.Token);
         }
 
         private static async Task<HttpResponseMessage> MakeRequest(HttpRequestMessage request)
         {
-            using (var client = new HttpClient(new HttpClientHandler
+            while (true)
             {
-                AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
-                AllowAutoRedirect = false
-            }))
-            {
-                var response = await client.SendAsync(request);
+                var response = await Http.SendAsync(request);
                 var statusCode = (int) response.StatusCode;
 
                 // We want to handle redirects ourselves so that we can determine the final redirect Location (via header)
@@ -85,7 +93,7 @@ namespace Robinhood
                     Method = request.Method,
                     Version = request.Version
                 };
-                return await MakeRequest(newRequest);
+                request = newRequest;
             }
         }
 
