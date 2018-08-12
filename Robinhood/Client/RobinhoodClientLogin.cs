@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using Robinhood.Domain;
+using Robinhood.Domain.Internal;
 using Robinhood.Uri;
 
 namespace Robinhood.Client
@@ -79,7 +79,13 @@ namespace Robinhood.Client
                 var statusCode = (int) response.StatusCode;
 
                 // We want to handle redirects ourselves so that we can determine the final redirect Location (via header)
-                if (statusCode < 300 || statusCode > 399) return response;
+                if (statusCode < 300 || statusCode > 399)
+                {
+                    return response.IsSuccessStatusCode
+                        ? response
+                        : throw new HttpRequestException(await response.Content.ReadAsStringAsync());
+                }
+
                 var redirectUri = response.Headers.Location;
                 if (!redirectUri.IsAbsoluteUri)
                 {

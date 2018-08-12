@@ -1,4 +1,4 @@
-﻿namespace Robinhood.Domain
+﻿namespace Robinhood.Domain.Internal
 {
     internal class TokenResponse
     {

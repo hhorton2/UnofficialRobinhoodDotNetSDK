@@ -12,7 +12,7 @@ namespace Robinhood.Client
 {
     public partial class RobinhoodClient
     {
-        public static async Task<Quote> GetQuote(string symbol)
+        public async Task<Quote> GetQuote(string symbol)
         {
             var address = new UriBuilder
             {
@@ -30,7 +30,7 @@ namespace Robinhood.Client
             return JsonConvert.DeserializeObject<Quote>(responseBody, JsonSettings);
         }
 
-        public static async Task<IEnumerable<Quote>> GetQuotes(IEnumerable<string> symbols)
+        public async Task<IEnumerable<Quote>> GetQuotes(IEnumerable<string> symbols)
         {
             var sb = new StringBuilder();
             sb.Append("?symbols=");

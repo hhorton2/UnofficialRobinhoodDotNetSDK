@@ -5,5 +5,7 @@ namespace Robinhood.Uri
         public static string RootUri => "api.robinhood.com";
         public static string Login => "api-token-auth";
         public static string Quotes => "quotes";
+        public static string HistoricalQuotes => "quotes/historicals";
+
     }
 }
